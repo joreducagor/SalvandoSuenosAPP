@@ -1,5 +1,6 @@
 package com.unmsm.myapplication.Network;
 
+import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.models.User;
 
 import java.util.ArrayList;
@@ -16,4 +17,6 @@ public interface CustomService {
 
     @GET(Urls.USER_SHOW)
     Call<User> showCurrentUser(@Query("user_id") long id);
+    @GET(Urls.USER_TIMELINE)
+    Call<List<Tweet>> getUserTimeline(@Query("user_id") long id, @Query("count") int count);
 }

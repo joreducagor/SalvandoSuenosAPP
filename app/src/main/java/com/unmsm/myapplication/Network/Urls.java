@@ -6,5 +6,5 @@ package com.unmsm.myapplication.Network;
 interface Urls {
     String USER_SHOW = "1.1/users/show.json";
     String USER_SEARCH = "1.1/users/search.json";
-    String USER_AUTH = "oauth2/token";
+    String USER_TIMELINE = "1.1/statuses/user_timeline.json";
 }
