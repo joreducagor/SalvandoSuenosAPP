@@ -5,16 +5,16 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".SalvandoSuenosApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".SalvandoSuenosApplication">
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="e6b514d1b8f67fd875dab6cfb0025b43d0acdbe5"
-            />
+            android:value="e6b514d1b8f67fd875dab6cfb0025b43d0acdbe5" />
+
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.MainActivity"/>
+        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.UserDetail"></activity>
     </application>
 
 </manifest>
