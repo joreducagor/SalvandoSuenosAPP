@@ -36,7 +36,8 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     ImageView iv_image;
-    TextView tv_user;
+    TextView tv_user_screen;
+    TextView tv_user_name;
     SearchView sv_search;
     RecyclerView rv;
     ProgressBar pb;
@@ -59,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         iv_image = (ImageView) findViewById(R.id.iv_image);
-        tv_user = (TextView) findViewById(R.id.tv_user);
+        tv_user_name = (TextView) findViewById(R.id.tv_user_name);
+        tv_user_screen = (TextView) findViewById(R.id.tv_user_screen);
         sv_search = (SearchView) findViewById(R.id.sv_search);
         rv = (RecyclerView) findViewById(R.id.rv);
         pb = (ProgressBar) findViewById(R.id.pb);
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setupViews(){
 
-        tv_user.setText(activeSession.getUserName());
+        tv_user_screen.setText("@" + activeSession.getUserName());
 
         sv_search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()){
                     current = response.body();
+                    tv_user_name.setText(current.name);
                     setupViews();
                 }
                 pb.setVisibility(View.GONE);

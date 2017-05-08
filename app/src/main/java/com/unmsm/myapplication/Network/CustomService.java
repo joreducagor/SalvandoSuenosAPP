@@ -17,6 +17,7 @@ public interface CustomService {
 
     @GET(Urls.USER_SHOW)
     Call<User> showCurrentUser(@Query("user_id") long id);
+
     @GET(Urls.USER_TIMELINE)
     Call<List<Tweet>> getUserTimeline(@Query("user_id") long id, @Query("count") int count);
 }

@@ -21,23 +21,35 @@
             android:layout_height="100dp" />
 
         <TextView
-            android:textSize="17sp"
-            android:id="@+id/tv_user_name"
+            android:layout_marginBottom="2dp"
+            android:textSize="22sp"
+            android:id="@+id/tv_full_name"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:gravity="center"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="20dp"
-            android:id="@+id/rv_tweets"
+        <TextView
+            android:layout_marginBottom="20dp"
+            android:textSize="15sp"
+            android:id="@+id/tv_user_name"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:gravity="center"/>
+
+        <ListView android:id="@id/android:list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="#e1e8ed"
+            android:dividerHeight="1dp"
+            android:drawSelectorOnTop="false"/>
     </LinearLayout>
-
-
 
     <ProgressBar
         android:visibility="gone"
@@ -47,3 +59,4 @@
         android:id="@+id/pb"/>
 
 </RelativeLayout>
+

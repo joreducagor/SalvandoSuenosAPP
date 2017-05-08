@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by rubymobile on 05/05/2017.
+ * Created by NriKe on 05/05/2017.
  */
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.MyHolder>{
@@ -36,7 +36,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.MyHolder>{
 
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
-        holder.tweet.setTweet(data.get(position));
+        holder.tweet = new TweetView(context,data.get(position));
     }
 
     @Override
@@ -45,9 +45,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.MyHolder>{
     }
 
     public class MyHolder extends RecyclerView.ViewHolder{
-
         TweetView tweet;
-
         public MyHolder(View itemView) {
             super(itemView);
             tweet = (TweetView) itemView.findViewById(R.id.tweet);
