@@ -7,4 +7,5 @@ interface Urls {
     String USER_SHOW = "1.1/users/show.json";
     String USER_SEARCH = "1.1/users/search.json";
     String USER_TIMELINE = "1.1/statuses/user_timeline.json";
+    String CREATE_USER = "users/";
 }

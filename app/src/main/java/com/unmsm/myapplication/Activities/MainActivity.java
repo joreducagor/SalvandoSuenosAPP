@@ -1,6 +1,9 @@
 package com.unmsm.myapplication.Activities;
 
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,10 +23,14 @@ import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
+import com.unmsm.myapplication.Adapter.TabsAdapter;
 import com.unmsm.myapplication.Adapter.UserAdapter;
 import com.unmsm.myapplication.Network.CustomService;
+import com.unmsm.myapplication.Network.Models.CreateUserResponse;
+import com.unmsm.myapplication.Network.Models.DetailUser;
 import com.unmsm.myapplication.Network.MyTwitterApiClient;
 import com.unmsm.myapplication.R;
+import com.unmsm.myapplication.SalvandoSuenosApplication;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,21 +45,20 @@ public class MainActivity extends AppCompatActivity {
     ImageView iv_image;
     TextView tv_user_screen;
     TextView tv_user_name;
-    SearchView sv_search;
-    RecyclerView rv;
-    ProgressBar pb;
 
-    List<User> data = new ArrayList<>();
-    UserAdapter adapter;
+
+
+
     TwitterSession activeSession;
     MyTwitterApiClient myApiClient;
     User current;
-    LinearLayoutManager layoutManager;
 
-    int page = 1;
-    int count = 20;
-    String query;
-    boolean isLoading = false;
+    ProgressBar pb;
+
+
+    TabLayout tabs;
+    ViewPager pager;
+    TabsAdapter tabsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +68,8 @@ public class MainActivity extends AppCompatActivity {
         iv_image = (ImageView) findViewById(R.id.iv_image);
         tv_user_name = (TextView) findViewById(R.id.tv_user_name);
         tv_user_screen = (TextView) findViewById(R.id.tv_user_screen);
-        sv_search = (SearchView) findViewById(R.id.sv_search);
-        rv = (RecyclerView) findViewById(R.id.rv);
         pb = (ProgressBar) findViewById(R.id.pb);
+        setupTabs();
 
         activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
 
@@ -73,98 +78,33 @@ public class MainActivity extends AppCompatActivity {
         getUser();
     }
 
+    private void setupTabs() {
+        tabs = (TabLayout) findViewById(R.id.tabs);
+        pager = (ViewPager) findViewById(R.id.pager);
+        tabsAdapter = new TabsAdapter(getSupportFragmentManager());
+
+        pager.setAdapter(tabsAdapter);
+        tabs.setupWithViewPager(pager);
+
+        //nombre a pestañas
+        tabs.getTabAt(0).setText("Search");
+        tabs.getTabAt(1).setText("Linked Accounts");
+
+        tabs.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
+        tabs.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white ));
+
+        pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+    }
+
     public void setupViews(){
 
         tv_user_screen.setText("@" + activeSession.getUserName());
-
-        sv_search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                data = new ArrayList<>();
-                MainActivity.this.query = query;
-                page = 1;
-                count = 20;
-
-                pb.setVisibility(View.VISIBLE);
-
-                CustomService call = myApiClient.getCustomService();
-
-                call.searchUsers(query,page,count).enqueue(new Callback<List<User>>() {
-                    @Override
-                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                        if(response.isSuccessful()){
-                            List<User> temp = new ArrayList(response.body());
-                            data.addAll(temp);
-                            setDataIntoRv();
-                        }
-                        pb.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<User>> call, Throwable t) {
-                        pb.setVisibility(View.GONE);
-                    }
-                });
-
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
         Picasso.with(this).load(current.profileImageUrl).into(iv_image);
 
-        setScrollListenerToRv();
+
     }
 
-    private void setScrollListenerToRv() {
-        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
 
-                if(dy > 0){
-                    if(layoutManager.findLastVisibleItemPosition() == adapter.getItemCount() - 1) {
-                        if(!isLoading){
-                            pb.setVisibility(View.VISIBLE);
-
-                            CustomService call = myApiClient.getCustomService();
-                            page++;
-                            count += 20 ;
-                            isLoading = true;
-
-                            call.searchUsers(query,page,count).enqueue(new Callback<List<User>>() {
-                                @Override
-                                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                                    if(response.isSuccessful()){
-                                        List<User> temp = new ArrayList(response.body());
-
-                                        data.addAll(temp);
-                                        adapter.notifyDataSetChanged();
-                                        rv.scrollToPosition(adapter.getItemCount() - count -1);
-                                    }
-                                    pb.setVisibility(View.GONE);
-                                    isLoading = false;
-                                }
-
-                                @Override
-                                public void onFailure(Call<List<User>> call, Throwable t) {
-                                    pb.setVisibility(View.GONE);
-                                    isLoading = false;
-                                }
-                            });
-
-
-                        }
-
-                    }
-                }
-            }
-        });
-    }
 
     private void getUser() {
         pb.setVisibility(View.VISIBLE);
@@ -177,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                     current = response.body();
                     tv_user_name.setText(current.name);
                     setupViews();
+                    createUserService();
                 }
                 pb.setVisibility(View.GONE);
             }
@@ -188,12 +129,40 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setDataIntoRv() {
-        adapter = new UserAdapter(data,this);
-        layoutManager = new LinearLayoutManager(this);
-        rv.setLayoutManager(layoutManager);
-        rv.setAdapter(adapter);
+
+    private void createUserService() {
+        CreateUserResponse body = new CreateUserResponse();
+        body.setUsername(current.screenName);
+        body.setFirst_name(current.name);
+        body.setLast_name(current.name);
+        body.setEmail(current.email);
+
+        DetailUser detailUser = new DetailUser();
+        detailUser.setTwitter_token(activeSession.getAuthToken().token);
+        detailUser.setLocation(current.location);
+        detailUser.setDescription(current.description);
+
+        body.setDetailuser(detailUser);
+
+
+        Call<CreateUserResponse> call = SalvandoSuenosApplication.getInstance().getServices().createUser(body);
+
+        call.enqueue(new Callback<CreateUserResponse>() {
+            @Override
+            public void onResponse(Call<CreateUserResponse> call, Response<CreateUserResponse> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(MainActivity.this,"User created",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CreateUserResponse> call, Throwable t) {
+                Log.e("error",t.getMessage());
+            }
+        });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

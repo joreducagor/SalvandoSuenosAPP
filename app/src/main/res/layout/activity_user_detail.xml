@@ -12,35 +12,67 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_user_image"
-            android:background="#000000"
-            android:layout_marginTop="30dp"
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:weightSum="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:scaleType="centerInside"
+                android:layout_weight="1"
+                android:id="@+id/iv_user_image"
+                android:background="#000000"
+                android:layout_width="0dp"
+                android:layout_height="100dp" />
+
+            <LinearLayout
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_marginBottom="2dp"
+                    android:textSize="22sp"
+                    android:id="@+id/tv_full_name"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_marginBottom="20dp"
+                    android:textSize="15sp"
+                    android:id="@+id/tv_user_name"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/tw__composer_white"
+            android:background="@color/colorPrimary"
+            android:id="@+id/bt_vincular"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_gravity="center_horizontal"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
+            android:text="Vincular Cuenta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_marginBottom="2dp"
-            android:textSize="22sp"
-            android:id="@+id/tv_full_name"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:gravity="center"/>
-
-        <TextView
-            android:layout_marginBottom="20dp"
-            android:textSize="15sp"
-            android:id="@+id/tv_user_name"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"/>
 
         <ListView android:id="@id/android:list"
             android:layout_width="match_parent"

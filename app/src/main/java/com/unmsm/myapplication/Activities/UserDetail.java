@@ -2,11 +2,14 @@ package com.unmsm.myapplication.Activities;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -32,6 +35,7 @@ public class UserDetail extends ListActivity {
     TextView tv_user_name;
     ImageView iv_user_image;
     User current;
+    Button bt_vincular;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +47,18 @@ public class UserDetail extends ListActivity {
         iv_user_image = (ImageView)findViewById(R.id.iv_user_image);
         tv_user_name = (TextView) findViewById(R.id.tv_user_name);
         tv_full_name = (TextView) findViewById(R.id.tv_full_name);
+        bt_vincular = (Button) findViewById(R.id.bt_vincular);
+
         activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
         myApiClient = new MyTwitterApiClient(activeSession);
         getUser(user_id_s);
+
+        bt_vincular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void getUser(final String user_id) {
