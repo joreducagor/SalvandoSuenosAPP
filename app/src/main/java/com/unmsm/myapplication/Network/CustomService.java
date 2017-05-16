@@ -4,6 +4,7 @@ import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.models.User;
 import com.unmsm.myapplication.Activities.UserDetail;
 import com.unmsm.myapplication.Network.Models.CreateUserResponse;
+import com.unmsm.myapplication.Network.Models.LinkedAccountBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,4 +28,7 @@ public interface CustomService {
 
     @POST(Urls.CREATE_USER)
     Call<CreateUserResponse> createUser(@Body CreateUserResponse body);
+
+    @POST(Urls.LINK_USER)
+    Call<Void> linkUser(@Body LinkedAccountBody linkedAccountBody);
 }

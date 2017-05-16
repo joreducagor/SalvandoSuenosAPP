@@ -8,4 +8,5 @@ interface Urls {
     String USER_SEARCH = "1.1/users/search.json";
     String USER_TIMELINE = "1.1/statuses/user_timeline.json";
     String CREATE_USER = "users/";
+    String LINK_USER = "linked_accounts/";
 }
