@@ -21,8 +21,10 @@ import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
 import com.twitter.sdk.android.tweetui.UserTimeline;
 import com.unmsm.myapplication.Network.CustomCallback;
 import com.unmsm.myapplication.Network.CustomService;
+import com.unmsm.myapplication.Network.Models.DeleteLinkedAccountbody;
 import com.unmsm.myapplication.Network.Models.LinkedAccountBody;
 import com.unmsm.myapplication.Network.Models.LinkedAccountParams;
+import com.unmsm.myapplication.Network.Models.VerifyResponse;
 import com.unmsm.myapplication.Network.MyTwitterApiClient;
 import com.unmsm.myapplication.R;
 import com.unmsm.myapplication.SalvandoSuenosApplication;
@@ -48,8 +50,7 @@ public class UserDetail extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
-        Long user_id = getIntent().getLongExtra("USER_ID", 0);
-        String user_id_s = String.valueOf(user_id);
+        String user_id_s = getIntent().getStringExtra("USER_ID");
         pb = (ProgressBar)findViewById(R.id.pb);
         iv_user_image = (ImageView)findViewById(R.id.iv_user_image);
         tv_user_name = (TextView) findViewById(R.id.tv_user_name);
@@ -58,7 +59,9 @@ public class UserDetail extends ListActivity {
 
         activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
         myApiClient = new MyTwitterApiClient(activeSession);
+        //get Other user Data
         getUser(user_id_s,true);
+        //Get session user data
         getUser(String.valueOf(activeSession.getUserId()),false);
 
         bt_vincular.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +73,7 @@ public class UserDetail extends ListActivity {
 
                 LinkedAccountParams linkedAccountParams = new LinkedAccountParams();
                 linkedAccountParams.setTwitter_user_id(current.idStr);
+                linkedAccountParams.setTwitter_screen_name(current.screenName);
 
                 linkedAccountBody.setLinked_account_params(linkedAccountParams);
 
@@ -90,6 +94,33 @@ public class UserDetail extends ListActivity {
 
                     }
                 });
+            }
+        });
+    }
+
+    private void verifyLinkedAccount() {
+        DeleteLinkedAccountbody body = new DeleteLinkedAccountbody();
+        body.setUsername(activeSession.getUserName());
+        body.setTwitter_user_id(current.idStr);
+
+        Call<VerifyResponse> call = SalvandoSuenosApplication.getInstance().getServices().verifyLinkedAccount(body);
+
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                if(response.isSuccessful()){
+                    if(response.body().isLinked_account()){
+                        bt_vincular.setText("Cuenta Vinculada");
+                        bt_vincular.setEnabled(false);
+                    }else{
+                        bt_vincular.setText("Vincular Cuenta");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+
             }
         });
     }
@@ -116,6 +147,8 @@ public class UserDetail extends ListActivity {
                                 .setTimeline(userTimeLine)
                                 .build();
                         UserDetail.this.setListAdapter(adapter);
+
+                        verifyLinkedAccount();
                     }else{
                         sessionUser = response.body();
                     }

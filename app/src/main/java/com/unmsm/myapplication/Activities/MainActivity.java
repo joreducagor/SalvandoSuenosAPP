@@ -27,12 +27,14 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
 import com.unmsm.myapplication.Adapter.TabsAdapter;
 import com.unmsm.myapplication.Adapter.UserAdapter;
+import com.unmsm.myapplication.Fragment.LinkedAccountsFragment;
 import com.unmsm.myapplication.Network.CustomService;
 import com.unmsm.myapplication.Network.Models.CreateUserResponse;
 import com.unmsm.myapplication.Network.Models.DetailUser;
 import com.unmsm.myapplication.Network.MyTwitterApiClient;
 import com.unmsm.myapplication.R;
 import com.unmsm.myapplication.SalvandoSuenosApplication;
+import com.unmsm.myapplication.Utils.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabs;
     ViewPager pager;
     TabsAdapter tabsAdapter;
+
+    SharedPreferencesHelper manager;
 
     public static final String TWITTER_KEY = "2yZlN4gTUMAD9pTiGcmth0caF";
     public static final String TWITTER_SECRET = "LUXIdua288lSzo04aI4M7L2nz3PCiKDMGx6olQh8nei5PudYFM";
@@ -96,13 +100,32 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(pager);
 
         //nombre a pestañas
-        tabs.getTabAt(0).setText("Search");
-        tabs.getTabAt(1).setText("Linked Accounts");
+        tabs.getTabAt(0).setText("Buscar");
+        tabs.getTabAt(1).setText("Cuentas Vinculadas");
 
         tabs.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
         tabs.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white ));
 
         pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition() == 1){
+                    LinkedAccountsFragment.instance.getLinkedAccounts();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     public void setupViews(){
@@ -161,6 +184,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<CreateUserResponse> call, Response<CreateUserResponse> response) {
                 if(response.isSuccessful()){
                     Toast.makeText(MainActivity.this,"User created",Toast.LENGTH_SHORT).show();
+
+                    manager = SharedPreferencesHelper.getInstance(MainActivity.this);
+
+                    manager.setUserIdDb(response.body().getId());
                 }
             }
 

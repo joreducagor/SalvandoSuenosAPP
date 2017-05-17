@@ -19,6 +19,7 @@ public class SharedPreferencesHelper {
     private static final String TWITTER_NICK = "twitterNick";
     private static final String AUTH_TOKEN = "authToken";
     private static final String BASIC_TOKEN = "basic_token";
+    private static final String USER_ID_DB = "user_id_db";
     private static SharedPreferencesHelper self;
     private final SharedPreferences mPreferences;
 
@@ -37,6 +38,15 @@ public class SharedPreferencesHelper {
         mPreferences.edit().clear().apply();
     }
 
+    public void setUserIdDb(int id){
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt(USER_ID_DB, id);
+        editor.apply();
+    }
+
+    public int getUserIdDb(){
+        return mPreferences.getInt(USER_ID_DB, 0);
+    }
 
     public void setBasicToken(String basic){
         SharedPreferences.Editor editor = mPreferences.edit();

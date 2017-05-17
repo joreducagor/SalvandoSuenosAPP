@@ -1,5 +1,6 @@
 package com.unmsm.myapplication.Fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
 import com.twitter.sdk.android.core.TwitterCore;
@@ -67,6 +69,9 @@ public class SearchFragment extends Fragment{
                 SearchFragment.this.query = query;
                 page = 1;
                 count = 20;
+
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
 
                 progress.setVisibility(View.VISIBLE);
 

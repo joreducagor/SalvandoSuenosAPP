@@ -55,7 +55,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>{
             public void onClick(View v) {
                 Log.e("user_id", String.valueOf(data.get(position).getId()));
                 Intent open_details = new Intent(context, UserDetail.class);
-                open_details.putExtra("USER_ID", data.get(position).getId());
+                open_details.putExtra("USER_ID", String.valueOf(data.get(position).getId()));
                 context.startActivity(open_details);
             }
         });

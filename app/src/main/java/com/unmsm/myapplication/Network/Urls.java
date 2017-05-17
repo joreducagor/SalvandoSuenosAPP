@@ -9,4 +9,7 @@ interface Urls {
     String USER_TIMELINE = "1.1/statuses/user_timeline.json";
     String CREATE_USER = "users/";
     String LINK_USER = "linked_accounts/";
+    String LINKED_ACCOUNTS = "users/{user_id}/linked_accounts/";
+    String DELETE_LINKED_ACCOUNT = "linked_accounts/";
+    String VERIFY = "linked_accounts/verify/";
 }

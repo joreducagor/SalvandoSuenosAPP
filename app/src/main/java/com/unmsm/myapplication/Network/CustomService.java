@@ -4,15 +4,22 @@ import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.models.User;
 import com.unmsm.myapplication.Activities.UserDetail;
 import com.unmsm.myapplication.Network.Models.CreateUserResponse;
+import com.unmsm.myapplication.Network.Models.DeleteLinkedAccountResponse;
+import com.unmsm.myapplication.Network.Models.DeleteLinkedAccountbody;
 import com.unmsm.myapplication.Network.Models.LinkedAccountBody;
+import com.unmsm.myapplication.Network.Models.LinkedAccountsResponse;
+import com.unmsm.myapplication.Network.Models.VerifyResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 // example users/search service endpoint
@@ -31,4 +38,13 @@ public interface CustomService {
 
     @POST(Urls.LINK_USER)
     Call<Void> linkUser(@Body LinkedAccountBody linkedAccountBody);
+
+    @GET(Urls.LINKED_ACCOUNTS)
+    Call<LinkedAccountsResponse> linkedAccounts(@Path("user_id") String user_id);
+
+    @HTTP(method = "DELETE", path = Urls.DELETE_LINKED_ACCOUNT, hasBody = true)
+    Call<DeleteLinkedAccountResponse> deleteLinkedAccount(@Body DeleteLinkedAccountbody deleteLinkedAccountbody);
+
+    @POST(Urls.VERIFY)
+    Call<VerifyResponse> verifyLinkedAccount(@Body DeleteLinkedAccountbody deleteLinkedAccountbody);
 }

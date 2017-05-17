@@ -25,7 +25,6 @@
                 android:scaleType="centerInside"
                 android:layout_weight="1"
                 android:id="@+id/iv_user_image"
-                android:background="#000000"
                 android:layout_width="0dp"
                 android:layout_height="100dp" />
 
@@ -69,10 +68,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_gravity="center_horizontal"
-            android:text="Vincular Cuenta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
 
         <ListView android:id="@id/android:list"
             android:layout_width="match_parent"
@@ -81,6 +78,7 @@
             android:divider="#e1e8ed"
             android:dividerHeight="1dp"
             android:drawSelectorOnTop="false"/>
+
     </LinearLayout>
 
     <ProgressBar
