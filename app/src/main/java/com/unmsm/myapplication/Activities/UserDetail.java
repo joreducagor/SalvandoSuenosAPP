@@ -74,6 +74,8 @@ public class UserDetail extends ListActivity {
                 LinkedAccountParams linkedAccountParams = new LinkedAccountParams();
                 linkedAccountParams.setTwitter_user_id(current.idStr);
                 linkedAccountParams.setTwitter_screen_name(current.screenName);
+                linkedAccountParams.setTwitter_user_name(current.name);
+                linkedAccountParams.setTwitter_image_url(current.profileImageUrl);
 
                 linkedAccountBody.setLinked_account_params(linkedAccountParams);
 

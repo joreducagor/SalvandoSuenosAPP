@@ -183,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<CreateUserResponse> call, Response<CreateUserResponse> response) {
                 if(response.isSuccessful()){
-                    Toast.makeText(MainActivity.this,"User created",Toast.LENGTH_SHORT).show();
 
                     manager = SharedPreferencesHelper.getInstance(MainActivity.this);
 

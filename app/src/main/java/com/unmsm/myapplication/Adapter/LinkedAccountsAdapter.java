@@ -50,8 +50,9 @@ public class LinkedAccountsAdapter extends RecyclerView.Adapter<LinkedAccountsAd
 
     @Override
     public void onBindViewHolder(MyHolder holder, final int position) {
-//        Picasso.with(context).load(data.get(position).getPath()).into(holder.iv_image);
+        Picasso.with(context).load(data.get(position).getTwitter_image_url()).into(holder.iv_image);
         holder.tv_nickname.setText("@"+data.get(position).getTwitter_screen_name());
+        holder.tv_username.setText(data.get(position).getTwitter_user_name());
         holder.tv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +81,7 @@ public class LinkedAccountsAdapter extends RecyclerView.Adapter<LinkedAccountsAd
         TextView tv_nickname;
         TextView tv_delete;
         LinearLayout detail_user;
+        TextView tv_username;
 
         public MyHolder(View v) {
             super(v);
@@ -87,6 +89,7 @@ public class LinkedAccountsAdapter extends RecyclerView.Adapter<LinkedAccountsAd
             tv_nickname = (TextView) v.findViewById(R.id.tv_nickname);
             tv_delete = (TextView) v.findViewById(R.id.tv_delete);
             detail_user = (LinearLayout) v.findViewById(R.id.detail_user);
+            tv_username = (TextView) v.findViewById(R.id.tv_username);
         }
     }
 }

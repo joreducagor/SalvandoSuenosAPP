@@ -8,7 +8,25 @@ public class LinkedAccountItem {
     int id;
     String twitter_user_id;
     String twitter_screen_name;
+    String twitter_user_name;
+    String twitter_image_url;
     String created_at;
+
+    public String getTwitter_user_name() {
+        return twitter_user_name;
+    }
+
+    public void setTwitter_user_name(String twitter_user_name) {
+        this.twitter_user_name = twitter_user_name;
+    }
+
+    public String getTwitter_image_url() {
+        return twitter_image_url;
+    }
+
+    public void setTwitter_image_url(String twitter_image_url) {
+        this.twitter_image_url = twitter_image_url;
+    }
 
     public int getId() {
         return id;
