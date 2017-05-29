@@ -1,5 +1,9 @@
 package com.unmsm.myapplication.Activities;
 
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +11,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -26,6 +32,7 @@ import java.io.UnsupportedEncodingException;
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Response;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -108,7 +115,68 @@ public class LoginActivity extends AppCompatActivity {
 
     private void openMain() {
         startActivity(new Intent(this,MainActivity.class));
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.e("Jorgito", "Token: " + token);
         finish();
     }
+
+    /**
+     * This method validate if the mobile has google play Service to date
+     * @return is to date or not
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        Log.e("josh", "resultCode : "+resultCode);
+        //values to result code:
+        // SUCCESS = 0
+        // SERVICE_MISSING = 1
+        // SERVICE_VERSION_UPDATE_REQUIRED = 2
+        // SERVICE_DISABLED = 3
+        // SERVICE_INVALID = 9
+        // SERVICE_MISSING_PERMISSION = 19
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                setupAlertPlayService();
+            } else {
+                Log.e("josh", "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * this alert is show when google play service is out of date.
+     */
+    private void setupAlertPlayService(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Google Play services out of date, please update it")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    //receive the token from service
+//    BroadcastReceiver tokenReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            String token = intent.getStringExtra("token");
+//            if(token != null && checkPlayServices())
+//            {
+//                MainActivity.this.hideProgressDialog();
+//            }
+//            if(press){
+//                et_token.setText(token);
+//            }
+//
+//        }
+//    };
 
 }

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "528827231538",
+    "firebase_url": "https://salvandosuenos-169120.firebaseio.com",
+    "project_id": "salvandosuenos-169120",
+    "storage_bucket": "salvandosuenos-169120.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528827231538:android:2f3cce84d3689a8a",
+        "android_client_info": {
+          "package_name": "com.unmsm.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "528827231538-b59k2ofje5cvq5tbma65pdbj7tdusa92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWisHaCLpSO-9d2jqPJ4cdIxJkFadwJeA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
