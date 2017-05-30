@@ -2,24 +2,19 @@ package com.unmsm.myapplication.Activities;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -27,7 +22,9 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
 import com.unmsm.myapplication.Adapter.TabsAdapter;
 import com.unmsm.myapplication.Adapter.UserAdapter;
+import com.unmsm.myapplication.Fragment.DrawerFragment;
 import com.unmsm.myapplication.Fragment.LinkedAccountsFragment;
+import com.unmsm.myapplication.Fragment.SearchFragment;
 import com.unmsm.myapplication.Network.CustomService;
 import com.unmsm.myapplication.Network.Models.CreateUserResponse;
 import com.unmsm.myapplication.Network.Models.DetailUser;
@@ -35,31 +32,22 @@ import com.unmsm.myapplication.Network.MyTwitterApiClient;
 import com.unmsm.myapplication.R;
 import com.unmsm.myapplication.SalvandoSuenosApplication;
 import com.unmsm.myapplication.Utils.SharedPreferencesHelper;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener {
 
-    ImageView iv_image;
-    TextView tv_user_screen;
-    TextView tv_user_name;
-
-
-
+//    ImageView iv_image;
+//    TextView tv_user_screen;
+//    TextView tv_user_name;
 
     TwitterSession activeSession;
     MyTwitterApiClient myApiClient;
     User current;
 
-    ProgressBar pb;
+//    ProgressBar pb;
 
 
     TabLayout tabs;
@@ -78,60 +66,74 @@ public class MainActivity extends AppCompatActivity {
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
 
-        iv_image = (ImageView) findViewById(R.id.iv_image);
-        tv_user_name = (TextView) findViewById(R.id.tv_user_name);
-        tv_user_screen = (TextView) findViewById(R.id.tv_user_screen);
-        pb = (ProgressBar) findViewById(R.id.pb);
-        setupTabs();
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerFragment drawerFragment = (DrawerFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_drawer);
+        drawerFragment.setupMenu(R.id.fragment_drawer, (DrawerLayout)findViewById(R.id.drawer_layout),toolbar);
+        drawerFragment.setFragmentDrawerListener(this);
+
+//        iv_image = (ImageView) findViewById(R.id.iv_image);
+//        tv_user_name = (TextView) findViewById(R.id.tv_user_name);
+//        tv_user_screen = (TextView) findViewById(R.id.tv_user_screen);
+//        pb = (ProgressBar) findViewById(R.id.pb);
+//        setupTabs();
 
         activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
 
         myApiClient = new MyTwitterApiClient(activeSession);
 
         getUser();
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_fragment_container, new LinkedAccountsFragment());
+        fragmentTransaction.commit();
+
     }
 
-    private void setupTabs() {
-        tabs = (TabLayout) findViewById(R.id.tabs);
-        pager = (ViewPager) findViewById(R.id.pager);
-        tabsAdapter = new TabsAdapter(getSupportFragmentManager());
-
-        pager.setAdapter(tabsAdapter);
-        tabs.setupWithViewPager(pager);
-
-        //nombre a pestañas
-        tabs.getTabAt(0).setText("Buscar");
-        tabs.getTabAt(1).setText("Cuentas Vinculadas");
-
-        tabs.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
-        tabs.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white ));
-
-        pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
-
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getPosition() == 1){
-                    LinkedAccountsFragment.instance.getLinkedAccounts();
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-    }
+//    private void setupTabs() {
+//        tabs = (TabLayout) findViewById(R.id.tabs);
+//        pager = (ViewPager) findViewById(R.id.pager);
+//        tabsAdapter = new TabsAdapter(getSupportFragmentManager());
+//
+//        pager.setAdapter(tabsAdapter);
+//        tabs.setupWithViewPager(pager);
+//
+//        //nombre a pestañas
+//        tabs.getTabAt(0).setText("Buscar");
+//        tabs.getTabAt(1).setText("Cuentas Vinculadas");
+//
+//        tabs.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
+//        tabs.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white ));
+//
+//        pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+//
+//        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+//                if(tab.getPosition() == 1){
+//                    LinkedAccountsFragment.instance.getLinkedAccounts();
+//                }
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//
+//            }
+//        });
+//    }
 
     public void setupViews(){
 
-        tv_user_screen.setText("@" + activeSession.getUserName());
-        Picasso.with(this).load(current.profileImageUrl).into(iv_image);
+//        tv_user_screen.setText("@" + activeSession.getUserName());
+//        Picasso.with(this).load(current.profileImageUrl).into(iv_image);
 
 
     }
@@ -139,26 +141,26 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getUser() {
-        pb.setVisibility(View.VISIBLE);
-
-        CustomService call = myApiClient.getCustomService();
-        call.showCurrentUser(activeSession.getId()).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful()){
-                    current = response.body();
-                    tv_user_name.setText(current.name);
-                    setupViews();
-                    createUserService();
-                }
-                pb.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                pb.setVisibility(View.GONE);
-            }
-        });
+//        pb.setVisibility(View.VISIBLE);
+//
+//        CustomService call = myApiClient.getCustomService();
+//        call.showCurrentUser(activeSession.getId()).enqueue(new Callback<User>() {
+//            @Override
+//            public void onResponse(Call<User> call, Response<User> response) {
+//                if(response.isSuccessful()){
+//                    current = response.body();
+//                    tv_user_name.setText(current.name);
+//                    setupViews();
+//                    createUserService();
+//                }
+//                pb.setVisibility(View.GONE);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<User> call, Throwable t) {
+//                pb.setVisibility(View.GONE);
+//            }
+//        });
     }
 
 
@@ -218,5 +220,31 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onDrawerItemSelected(View view, int position) {
+        Log.e("Marisco", "opcion "+position);
+        Fragment fragment = new SearchFragment();
+        // borrar la imagen
+        switch (position){
+            case 0:
+                fragment = new SearchFragment();
+                break;
+            case 1:
+                fragment = new LinkedAccountsFragment();
+                break;
+            default:
+                fragment = new SearchFragment();
+                break;
+        }
+
+            if(fragment != null){
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_fragment_container, fragment);
+                fragmentTransaction.commit();
+
+            }
     }
 }

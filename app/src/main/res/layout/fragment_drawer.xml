@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.unmsm.myapplication.Fragment.DrawerFragment"
+    android:background="@color/tw__composer_black">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/tv_option1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_fragment"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/tv_option2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/linked_accounts_fragment"
+        android:textColor="@color/white"/>
+
+</LinearLayout>
