@@ -15,27 +15,32 @@
             android:name="io.fabric.ApiKey"
             android:value="e6b514d1b8f67fd875dab6cfb0025b43d0acdbe5" />
 
-        <activity android:name=".Activities.LoginActivity">
+        <activity
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:name=".Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Activities.MainActivity"
+            android:theme="@style/WithoutActionBar" />
+        <activity android:name=".Activities.UserDetail" />
 
-        <activity android:name=".Activities.MainActivity"
-            android:theme="@style/WithoutActionBar"/>
-
-        <activity android:name=".Activities.UserDetail"></activity>
         <service android:name=".fcm.FireBaseMessagingService">
-            <intent-filter> <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service android:name=".fcm.FirebaseInstanceIDService">
-        <intent-filter>
-            <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-        </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
         </service>
+
+        <activity android:name=".Activities.LoginActivity"></activity>
     </application>
 
 </manifest>

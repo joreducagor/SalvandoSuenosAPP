@@ -22,7 +22,12 @@ import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.models.User;
+import com.unmsm.myapplication.Network.CustomService;
+import com.unmsm.myapplication.Network.Models.CreateUserResponse;
+import com.unmsm.myapplication.Network.Models.DetailUser;
 import com.unmsm.myapplication.Network.Models.TokenResponse;
+import com.unmsm.myapplication.Network.MyTwitterApiClient;
 import com.unmsm.myapplication.R;
 import com.unmsm.myapplication.SalvandoSuenosApplication;
 import com.unmsm.myapplication.Utils.SharedPreferencesHelper;
@@ -38,7 +43,13 @@ public class LoginActivity extends AppCompatActivity {
 
     TwitterLoginButton loginButton;
 
+    User current;
+
     SharedPreferencesHelper manager;
+
+    TwitterSession activeSession;
+
+    MyTwitterApiClient myApiClient;
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     public static final String TWITTER_KEY = "2yZlN4gTUMAD9pTiGcmth0caF";
@@ -58,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(session != null){
             openMain();
+            return;
         }
 
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
@@ -93,8 +105,9 @@ public class LoginActivity extends AppCompatActivity {
         login_button_twitter.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                TwitterSession session = Twitter.getSessionManager().getActiveSession();
-                TwitterAuthToken authToken = session.getAuthToken();
+                activeSession = Twitter.getSessionManager().getActiveSession();
+                myApiClient = new MyTwitterApiClient(activeSession);
+                TwitterAuthToken authToken = activeSession.getAuthToken();
                 String token = authToken.token;
                 String secret = authToken.secret;
 
@@ -103,12 +116,75 @@ public class LoginActivity extends AppCompatActivity {
                 manager.setTwitterUserToken(token);
                 manager.setTwitterUserSecret(secret);
 
-                openMain();
+                getUser();
             }
 
             @Override
             public void failure(TwitterException exception) {
                 Toast.makeText(LoginActivity.this,"Failure",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getUser() {
+
+        CustomService call = myApiClient.getCustomService();
+        call.showCurrentUser(activeSession.getId()).enqueue(new retrofit2.Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful()){
+                    current = response.body();
+                    createUserService();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(LoginActivity.this,"La cagaste imbecil",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void createUserService() {
+        CreateUserResponse body = new CreateUserResponse();
+        body.setUsername(current.screenName);
+        body.setFirst_name(current.name);
+        body.setLast_name(current.name);
+        body.setEmail(current.email);
+
+        DetailUser detailUser = new DetailUser();
+        detailUser.setTwitter_token(activeSession.getAuthToken().token);
+        detailUser.setLocation(current.location);
+        detailUser.setDescription(current.description);
+
+        body.setDetailuser(detailUser);
+
+
+        Call<CreateUserResponse> call = SalvandoSuenosApplication.getInstance().getServices().createUser(body);
+
+        call.enqueue(new retrofit2.Callback<CreateUserResponse>() {
+            @Override
+            public void onResponse(Call<CreateUserResponse> call, Response<CreateUserResponse> response) {
+                if(response.isSuccessful()){
+
+                    manager = SharedPreferencesHelper.getInstance(LoginActivity.this);
+
+                    manager.setUserIdDb(response.body().getId());
+
+                    manager.setUserName(response.body().getFirst_name());
+
+                    manager.setTwitterNick(response.body().getUsername());
+
+                    manager.setTwitterImage(current.profileImageUrl);
+
+                    openMain();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CreateUserResponse> call, Throwable t) {
+                Log.e("error",t.getMessage());
             }
         });
     }

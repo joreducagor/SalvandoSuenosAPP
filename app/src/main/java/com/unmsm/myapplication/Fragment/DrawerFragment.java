@@ -10,13 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.unmsm.myapplication.R;
+import com.unmsm.myapplication.Utils.SharedPreferencesHelper;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DrawerFragment extends Fragment {
 
     private View drawerFragment;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private FragmentDrawerListener fragmentDrawerListener;
+
+    private SharedPreferencesHelper manager;
 
 
     public FragmentDrawerListener getFragmentDrawerListener() {
@@ -43,7 +50,7 @@ public class DrawerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        manager = SharedPreferencesHelper.getInstance(getActivity());
 
 
     }
@@ -85,8 +92,19 @@ public class DrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_drawer, container, false);
+        CircleImageView profile_image = (CircleImageView) v.findViewById(R.id.profile_image);
         TextView tv_option1 =  (TextView)v.findViewById(R.id.tv_option1);
+        TextView tv_name =  (TextView)v.findViewById(R.id.tv_name);
+        TextView tv_username =  (TextView)v.findViewById(R.id.tv_username);
         TextView tv_option2 =  (TextView)v.findViewById(R.id.tv_option2);
+        TextView tv_option3 =  (TextView)v.findViewById(R.id.tv_option3);
+        TextView tv_option4 =  (TextView)v.findViewById(R.id.tv_option4);
+
+        tv_name.setText(manager.getUserName());
+
+        tv_username.setText("@" + manager.getTwitterNick());
+
+        Picasso.with(getActivity()).load(manager.getTwitterImage()).into(profile_image);
 
         tv_option1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +118,22 @@ public class DrawerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 fragmentDrawerListener.onDrawerItemSelected(v,1);
+                drawerLayout.closeDrawers();
+            }
+        });
+
+        tv_option3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentDrawerListener.onDrawerItemSelected(v,2);
+                drawerLayout.closeDrawers();
+            }
+        });
+
+        tv_option4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentDrawerListener.onDrawerItemSelected(v,3);
                 drawerLayout.closeDrawers();
             }
         });

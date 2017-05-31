@@ -21,6 +21,8 @@ import com.unmsm.myapplication.R;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by rubymobile on 5/3/17.
  */
@@ -68,7 +70,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>{
 
     public class MyHolder extends RecyclerView.ViewHolder{
 
-        ImageView iv_image;
+        CircleImageView iv_image;
         TextView tv_nickname;
         TextView tv_description;
         LinearLayout user_row;
@@ -76,7 +78,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>{
         public MyHolder(final View itemView) {
             super(itemView);
 
-            iv_image = (ImageView) itemView.findViewById(R.id.iv_image);
+            iv_image = (CircleImageView) itemView.findViewById(R.id.iv_image);
             tv_nickname = (TextView) itemView.findViewById(R.id.tv_nickname);
             tv_description = (TextView) itemView.findViewById(R.id.tv_description);
             user_row = (LinearLayout) itemView.findViewById(R.id.detail_user);

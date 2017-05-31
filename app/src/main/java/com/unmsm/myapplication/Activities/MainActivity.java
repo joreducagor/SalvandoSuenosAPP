@@ -24,6 +24,7 @@ import com.unmsm.myapplication.Adapter.TabsAdapter;
 import com.unmsm.myapplication.Adapter.UserAdapter;
 import com.unmsm.myapplication.Fragment.DrawerFragment;
 import com.unmsm.myapplication.Fragment.LinkedAccountsFragment;
+import com.unmsm.myapplication.Fragment.ResultsFragment;
 import com.unmsm.myapplication.Fragment.SearchFragment;
 import com.unmsm.myapplication.Network.CustomService;
 import com.unmsm.myapplication.Network.Models.CreateUserResponse;
@@ -43,17 +44,6 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 //    TextView tv_user_screen;
 //    TextView tv_user_name;
 
-    TwitterSession activeSession;
-    MyTwitterApiClient myApiClient;
-    User current;
-
-//    ProgressBar pb;
-
-
-    TabLayout tabs;
-    ViewPager pager;
-    TabsAdapter tabsAdapter;
-
     SharedPreferencesHelper manager;
 
     public static final String TWITTER_KEY = "2yZlN4gTUMAD9pTiGcmth0caF";
@@ -62,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        manager = SharedPreferencesHelper.getInstance(this);
+
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
@@ -73,166 +66,34 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         drawerFragment.setupMenu(R.id.fragment_drawer, (DrawerLayout)findViewById(R.id.drawer_layout),toolbar);
         drawerFragment.setFragmentDrawerListener(this);
 
-//        iv_image = (ImageView) findViewById(R.id.iv_image);
-//        tv_user_name = (TextView) findViewById(R.id.tv_user_name);
-//        tv_user_screen = (TextView) findViewById(R.id.tv_user_screen);
-//        pb = (ProgressBar) findViewById(R.id.pb);
-//        setupTabs();
-
-        activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
-
-        myApiClient = new MyTwitterApiClient(activeSession);
-
-        getUser();
-
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment_container, new LinkedAccountsFragment());
+        fragmentTransaction.replace(R.id.main_fragment_container, new SearchFragment());
         fragmentTransaction.commit();
 
     }
 
-//    private void setupTabs() {
-//        tabs = (TabLayout) findViewById(R.id.tabs);
-//        pager = (ViewPager) findViewById(R.id.pager);
-//        tabsAdapter = new TabsAdapter(getSupportFragmentManager());
-//
-//        pager.setAdapter(tabsAdapter);
-//        tabs.setupWithViewPager(pager);
-//
-//        //nombre a pestañas
-//        tabs.getTabAt(0).setText("Buscar");
-//        tabs.getTabAt(1).setText("Cuentas Vinculadas");
-//
-//        tabs.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
-//        tabs.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white ));
-//
-//        pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
-//
-//        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                if(tab.getPosition() == 1){
-//                    LinkedAccountsFragment.instance.getLinkedAccounts();
-//                }
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
-//    }
 
-    public void setupViews(){
-
-//        tv_user_screen.setText("@" + activeSession.getUserName());
-//        Picasso.with(this).load(current.profileImageUrl).into(iv_image);
-
-
-    }
-
-
-
-    private void getUser() {
-//        pb.setVisibility(View.VISIBLE);
-//
-//        CustomService call = myApiClient.getCustomService();
-//        call.showCurrentUser(activeSession.getId()).enqueue(new Callback<User>() {
-//            @Override
-//            public void onResponse(Call<User> call, Response<User> response) {
-//                if(response.isSuccessful()){
-//                    current = response.body();
-//                    tv_user_name.setText(current.name);
-//                    setupViews();
-//                    createUserService();
-//                }
-//                pb.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<User> call, Throwable t) {
-//                pb.setVisibility(View.GONE);
-//            }
-//        });
-    }
-
-
-    private void createUserService() {
-        CreateUserResponse body = new CreateUserResponse();
-        body.setUsername(current.screenName);
-        body.setFirst_name(current.name);
-        body.setLast_name(current.name);
-        body.setEmail(current.email);
-
-        DetailUser detailUser = new DetailUser();
-        detailUser.setTwitter_token(activeSession.getAuthToken().token);
-        detailUser.setLocation(current.location);
-        detailUser.setDescription(current.description);
-
-        body.setDetailuser(detailUser);
-
-
-        Call<CreateUserResponse> call = SalvandoSuenosApplication.getInstance().getServices().createUser(body);
-
-        call.enqueue(new Callback<CreateUserResponse>() {
-            @Override
-            public void onResponse(Call<CreateUserResponse> call, Response<CreateUserResponse> response) {
-                if(response.isSuccessful()){
-
-                    manager = SharedPreferencesHelper.getInstance(MainActivity.this);
-
-                    manager.setUserIdDb(response.body().getId());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CreateUserResponse> call, Throwable t) {
-                Log.e("error",t.getMessage());
-            }
-        });
-    }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.logout:
-                TwitterCore.getInstance().getSessionManager().clearActiveSession();
-                startActivity(new Intent(this,LoginActivity.class));
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
         Log.e("Marisco", "opcion "+position);
-        Fragment fragment = new SearchFragment();
-        // borrar la imagen
+        Fragment fragment = null;
         switch (position){
             case 0:
                 fragment = new SearchFragment();
                 break;
             case 1:
                 fragment = new LinkedAccountsFragment();
+                break;
+            case 2:
+                fragment = new ResultsFragment();
+                break;
+            case 3:
+                manager.logout();
+                TwitterCore.getInstance().getSessionManager().clearActiveSession();
+                startActivity(new Intent(this,LoginActivity.class));
+                finish();
                 break;
             default:
                 fragment = new SearchFragment();

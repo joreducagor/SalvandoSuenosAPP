@@ -20,6 +20,8 @@ import com.unmsm.myapplication.R;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by NriKe on 16/05/2017.
  */
@@ -77,7 +79,7 @@ public class LinkedAccountsAdapter extends RecyclerView.Adapter<LinkedAccountsAd
 
     public class MyHolder extends RecyclerView.ViewHolder {
 
-        ImageView iv_image;
+        CircleImageView iv_image;
         TextView tv_nickname;
         TextView tv_delete;
         LinearLayout detail_user;
@@ -85,7 +87,7 @@ public class LinkedAccountsAdapter extends RecyclerView.Adapter<LinkedAccountsAd
 
         public MyHolder(View v) {
             super(v);
-            iv_image = (ImageView) v.findViewById(R.id.iv_image);
+            iv_image = (CircleImageView) v.findViewById(R.id.iv_image);
             tv_nickname = (TextView) v.findViewById(R.id.tv_nickname);
             tv_delete = (TextView) v.findViewById(R.id.tv_delete);
             detail_user = (LinearLayout) v.findViewById(R.id.detail_user);

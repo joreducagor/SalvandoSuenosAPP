@@ -30,6 +30,7 @@ import com.unmsm.myapplication.R;
 import com.unmsm.myapplication.SalvandoSuenosApplication;
 
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,7 +42,7 @@ public class UserDetail extends ListActivity {
     TwitterSession activeSession;
     TextView tv_full_name;
     TextView tv_user_name;
-    ImageView iv_user_image;
+    CircleImageView iv_user_image;
     User current;
     User sessionUser;
     Button bt_vincular;
@@ -52,7 +53,7 @@ public class UserDetail extends ListActivity {
         setContentView(R.layout.activity_user_detail);
         String user_id_s = getIntent().getStringExtra("USER_ID");
         pb = (ProgressBar)findViewById(R.id.pb);
-        iv_user_image = (ImageView)findViewById(R.id.iv_user_image);
+        iv_user_image = (CircleImageView)findViewById(R.id.iv_user_image);
         tv_user_name = (TextView) findViewById(R.id.tv_user_name);
         tv_full_name = (TextView) findViewById(R.id.tv_full_name);
         bt_vincular = (Button) findViewById(R.id.bt_vincular);

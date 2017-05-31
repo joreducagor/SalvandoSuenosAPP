@@ -4,6 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="search_fragment">Buscar Cuenta</string>
     <string name="linked_accounts_fragment">Mis cuentas vinculadas</string>
+    <string name="resultados">Resultados</string>
+    <string name="logout">Cerrar sesión</string>
 
     <string name="open">Open</string>
 

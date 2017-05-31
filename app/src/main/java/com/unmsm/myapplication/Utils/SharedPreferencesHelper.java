@@ -11,8 +11,8 @@ public class SharedPreferencesHelper {
 
 
     public static final String SESSION_TOKEN = "Token";
-    private static final String USER = "currentUser";
-    private static final String NAME = "sportsventing";
+    private static final String USER_NAME = "user_name";
+    private static final String NAME = "SalvandoSueñosApp";
     private static final String TWITTER_USER_TOKEN = "twitterUserToken";
     private static final String TWITTER_USER_SECRET = "twitterUserSecret";
     private static final String TWITTER_IMAGE = "twitterImage";
@@ -34,8 +34,23 @@ public class SharedPreferencesHelper {
 
         return self;
     }
-    public void deleteAllSharedPreferences() {
-        mPreferences.edit().clear().apply();
+    public void logout() {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(USER_NAME, "");
+        editor.putString(TWITTER_NICK, "");
+        editor.putString(TWITTER_IMAGE, "");
+        editor.putString(USER_ID_DB, "");
+        editor.apply();
+    }
+
+    public void setUserName(String userName){
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(USER_NAME, userName);
+        editor.apply();
+    }
+
+    public String getUserName(){
+        return mPreferences.getString(USER_NAME, "");
     }
 
     public void setUserIdDb(int id){
