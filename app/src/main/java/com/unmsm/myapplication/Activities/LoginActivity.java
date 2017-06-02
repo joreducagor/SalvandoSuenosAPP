@@ -26,6 +26,9 @@ import com.twitter.sdk.android.core.models.User;
 import com.unmsm.myapplication.Network.CustomService;
 import com.unmsm.myapplication.Network.Models.CreateUserResponse;
 import com.unmsm.myapplication.Network.Models.DetailUser;
+import com.unmsm.myapplication.Network.Models.DeviceBody;
+import com.unmsm.myapplication.Network.Models.DeviceParams;
+import com.unmsm.myapplication.Network.Models.DeviceResponse;
 import com.unmsm.myapplication.Network.Models.TokenResponse;
 import com.unmsm.myapplication.Network.MyTwitterApiClient;
 import com.unmsm.myapplication.R;
@@ -38,6 +41,7 @@ import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Response;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.unmsm.myapplication.Utils.Utils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -178,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     manager.setTwitterImage(current.profileImageUrl);
 
-                    openMain();
+                    createDevice();
                 }
             }
 
@@ -189,10 +193,39 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void createDevice() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.e("Current token", token);
+        DeviceBody device = new DeviceBody();
+        DeviceParams deviceParams = new DeviceParams();
+
+        deviceParams.setDevice_type("0");
+        deviceParams.setKey(token);
+        deviceParams.setUuid(Utils.getUniqueID(this));
+
+        device.setUsername(current.screenName);
+        device.setDeviceparams(deviceParams);
+
+        Call<DeviceResponse> call = SalvandoSuenosApplication.getInstance().getServices().createDevice(device);
+
+        call.enqueue(new retrofit2.Callback<DeviceResponse>() {
+            @Override
+            public void onResponse(Call<DeviceResponse> call, Response<DeviceResponse> response) {
+                if(response.isSuccessful()){
+                    manager.setFcmToken(response.body().getKey());
+                    openMain();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DeviceResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void openMain() {
         startActivity(new Intent(this,MainActivity.class));
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.e("Jorgito", "Token: " + token);
         finish();
     }
 

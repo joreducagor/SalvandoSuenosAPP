@@ -20,6 +20,7 @@ public class SharedPreferencesHelper {
     private static final String AUTH_TOKEN = "authToken";
     private static final String BASIC_TOKEN = "basic_token";
     private static final String USER_ID_DB = "user_id_db";
+    private static final String FCM_TOKEN = "fcm_token";
     private static SharedPreferencesHelper self;
     private final SharedPreferences mPreferences;
 
@@ -51,6 +52,16 @@ public class SharedPreferencesHelper {
 
     public String getUserName(){
         return mPreferences.getString(USER_NAME, "");
+    }
+
+    public void setFcmToken(String fcmToken){
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(FCM_TOKEN, fcmToken);
+        editor.apply();
+    }
+
+    public String getFcmToken(){
+        return mPreferences.getString(FCM_TOKEN, "");
     }
 
     public void setUserIdDb(int id){

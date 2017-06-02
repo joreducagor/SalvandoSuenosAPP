@@ -12,4 +12,6 @@ interface Urls {
     String LINKED_ACCOUNTS = "users/{user_id}/linked_accounts/";
     String DELETE_LINKED_ACCOUNT = "linked_accounts/";
     String VERIFY = "linked_accounts/verify/";
+    String CREATE_DEVICE = "devices/";
+    String RESULTS = "users/{user_id}/results/";
 }

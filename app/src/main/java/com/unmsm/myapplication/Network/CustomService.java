@@ -2,20 +2,20 @@ package com.unmsm.myapplication.Network;
 
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.models.User;
-import com.unmsm.myapplication.Activities.UserDetail;
 import com.unmsm.myapplication.Network.Models.CreateUserResponse;
 import com.unmsm.myapplication.Network.Models.DeleteLinkedAccountResponse;
 import com.unmsm.myapplication.Network.Models.DeleteLinkedAccountbody;
+import com.unmsm.myapplication.Network.Models.DeviceBody;
+import com.unmsm.myapplication.Network.Models.DeviceResponse;
 import com.unmsm.myapplication.Network.Models.LinkedAccountBody;
 import com.unmsm.myapplication.Network.Models.LinkedAccountsResponse;
+import com.unmsm.myapplication.Network.Models.ResultListResponse;
 import com.unmsm.myapplication.Network.Models.VerifyResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
@@ -47,4 +47,10 @@ public interface CustomService {
 
     @POST(Urls.VERIFY)
     Call<VerifyResponse> verifyLinkedAccount(@Body DeleteLinkedAccountbody deleteLinkedAccountbody);
+
+    @POST(Urls.CREATE_DEVICE)
+    Call<DeviceResponse> createDevice(@Body DeviceBody deviceBody);
+
+    @GET(Urls.RESULTS)
+    Call<ResultListResponse> getResults(@Path("user_id") String user_id);
 }
