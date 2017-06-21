@@ -1,69 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.v7.widget.CardView android:layout_margin="10dp"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="3dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp"
-    android:background="@color/main_background"
-    android:id="@+id/detail_user">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:background="@color/main_background"
+        android:id="@+id/detail_user">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_gravity="center_vertical"
-                android:id="@+id/iv_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp" />
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:id="@+id/tv_username"
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:id="@+id/iv_image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
 
-                <TextView
-                    android:id="@+id/tv_nickname"
+                <LinearLayout
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:id="@+id/tv_username"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/tv_nickname"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_delete"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:text="x"
-            android:textStyle="bold"
-            android:background="@drawable/dialog_round_borders"
-            android:textSize="20sp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
-
-    <View
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#000000"/>
-</LinearLayout>
+            <TextView
+                android:id="@+id/tv_delete"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="x"
+                android:textStyle="bold"
+                android:background="@drawable/dialog_round_borders"
+                android:textSize="20sp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
