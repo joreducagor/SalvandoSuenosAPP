@@ -68,9 +68,19 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment_container, new SearchFragment());
-        fragmentTransaction.commit();
 
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            String notify = bundle.getString("notification");
+            if (notify != null){
+                fragmentTransaction.replace(R.id.main_fragment_container, new ResultsFragment());
+                fragmentTransaction.commit();
+            }else{
+                fragmentTransaction.replace(R.id.main_fragment_container, new SearchFragment());
+                fragmentTransaction.commit();
+            }
+        }
     }
 
 

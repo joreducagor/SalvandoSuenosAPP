@@ -46,7 +46,7 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
 // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-            showNotification("" + remoteMessage.getData().get("message"));
+            showNotification("" + remoteMessage.getNotification().getBody());
         }
 
 // Check if message contains a notification payload.
@@ -71,10 +71,11 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("notification","notifyFrag");
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("Test Notification")
+                .setContentTitle("Alerta!")
                 .setLargeIcon(((BitmapDrawable) ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_launcher, null)).getBitmap())
                 .setSmallIcon(getNotificationIcon())
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))

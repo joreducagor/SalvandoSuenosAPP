@@ -104,7 +104,10 @@ public class DrawerFragment extends Fragment {
 
         tv_username.setText("@" + manager.getTwitterNick());
 
-        Picasso.with(getActivity()).load(manager.getTwitterImage()).into(profile_image);
+        Picasso.with(getActivity())
+                .load(manager.getTwitterImage())
+                .error(R.drawable.holder_profile)
+                .into(profile_image);
 
         tv_option1.setOnClickListener(new View.OnClickListener() {
             @Override
